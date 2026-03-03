@@ -1,0 +1,41 @@
+pipeline {
+    agent any
+
+    stages {
+
+        stage("Clean workspace") {
+            steps {
+                cleanWs()
+            }
+        }
+
+        stage("Git Checkout") {
+            steps {
+                git branch: 'main', 
+                    url: 'https://github.com/yeshwanthlm/Prime-Video-Clone-Deployment.git'
+            }
+        }
+
+        stage("Build Docker Image") {
+            steps {
+                sh 'docker build -t prime-video-app .'
+            }
+        }
+
+        stage("Run Docker Container") {
+            steps {
+                sh '''
+                docker stop prime-video-container || true
+                docker rm prime-video-container || true
+                docker run -d -p 80:80 --name prime-video-container prime-video-app
+                '''
+            }
+        }
+	stage('Deploy to EKS') {
+ 	    steps {
+        	sh 'kubectl apply -f deployment.yaml'
+        	sh 'kubectl apply -f service.yaml'
+    		}
+	}	
+    }
+}
