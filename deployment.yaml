@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prime-video-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: prime-video
+  template:
+    metadata:
+      labels:
+        app: prime-video
+    spec:
+      containers:
+        - name: prime-video-container
+          image: jainnikh3/prime_video:latest
+          ports:
+            - containerPort: 3000
+
+

@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: prime-video-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: prime-video
+  ports:
+    - port: 80
+      targetPort: 3000
